@@ -6,6 +6,7 @@ This set of codes is a toolbox to download and resample GLISTIN-A radar interfer
 4. Resample (via bin-averaging) the DEM data to a resolution of your choosing using resample_pipeline.py.
 
 To download data: use download_level_1_data.py to download level 1 data from https://uavsar.jpl.nasa.gov/
+
 Keywords:
 - dataFolder (-d): Directory where data will be downloaded. (Required)
 - indexList (-i): List of swath indices to download. (Optional. Default is to download all 81 swaths)
