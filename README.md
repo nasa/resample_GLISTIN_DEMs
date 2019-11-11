@@ -4,3 +4,6 @@ This set of codes is a toolbox to download and resample GLISTIN-A radar interfer
 2. Determine which GLISTIN-A DEMs will be downloaded. Refer to Fenty_et_al_2019 for a map indicating the location of swath indices.
 3. Download the Level 1 data from NASA's UAVSAR website. Note that the resampling script relies on a particular directory structure to locate the Level 1 data on the local machine within "dataFolder". Please use the download_level_1_data.py code to ensure this structure is properly constructed.
 4. Resample (via bin-averaging) the DEM data to a resolution of your choosing using resample_pipeline.py.
+
+download_level_1_data.py Usage:
+- use this script to 
