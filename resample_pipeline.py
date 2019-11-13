@@ -1,29 +1,28 @@
 
 import os
 import numpy as np
+import argparse
 import resampler as rs
+import swath_references as sr
 
 
 
-def createSwathListDictionary(dataFolder,indexList):
-    indexFile=dataFolder+'/GLISTIN File List - By Index.csv'
-    f=open(indexFile)
-    lines=f.read()
-    f.close()
-    lines=lines.split('\n')
-    lines.pop(0)
-    indexToSwathList={}
-    for line in lines:
-        if len(line)>0:
-            line=line.split(',')
-            index=int(line[0])
-            if index in indexList:
-                swathSet=[]
-                for ll in line:
-                    if len(ll)>2:
-                        swathSet.append(ll)
-                indexToSwathList[index]=swathSet
-    return(indexToSwathList)
+def createSwathListDictionary(indexList,yearSet):
+    swathDictionary={}
+    allSwathsDictionary={}
+    for index in indexList:
+        swathSet=[]
+        allSwathsSet=[]
+        for year in range(2016,2020):
+            fileID = 'OMG_GLISTIN_Elevation_' + '{:02d}'.format(index) + '_' + str(year)
+            if fileID not in sr.fileIDsMissingIn2016():
+                swathID = sr.fileNameToSwathID(fileID, 50)
+                allSwathsSet.append(swathID)
+                if year in yearSet:
+                    swathSet.append(swathID)
+        swathDictionary[index]=swathSet
+        allSwathsDictionary[index]=allSwathsSet
+    return(swathDictionary,allSwathsDictionary)
 
 
 def get_variables(annotation):
@@ -72,29 +71,62 @@ def commonDomainForSwathsInList(dataFolder,swathList):
         max_lat = np.max([max_lat, max_swath_lat])
     return([min_lon,min_lat,max_lon,max_lat])
 
-def resamplePipeline(dataFolder,indexList=np.arange(81)+1,resolutionSet=[50]):
+def resamplePipeline(dataFolder,indexList=np.arange(81)+1,resolution=50,yearSet=[2016,2017,2018,2019]):
     #step 0: generate list of swaths to resample for each index in indexList
-    indexToSwathList = createSwathListDictionary(dataFolder,indexList)
+    swathDictionary,allSwathsDictionary = createSwathListDictionary(indexList,yearSet)
 
-    for resolution in resolutionSet:
-        if 'Resampled_'+str(resolution)+'m' not in os.listdir(dataFolder):
-            os.mkdir(os.path.join(dataFolder,'Resampled_'+str(resolution)+'m'))
+    if 'Resampled_'+str(resolution)+'m' not in os.listdir(dataFolder):
+        os.mkdir(os.path.join(dataFolder,'Resampled_'+str(resolution)+'m'))
 
     for index in indexList:
         indexID = 'OMG_GLISTIN_Elevation_' + '{:02d}'.format(index)
-        print('Resampling swaths for '+indexID)
+        swathList = swathDictionary[index]
+        print('Resampling '+str(len(swathList))+' swaths for '+indexID)
 
         #step 1: get a common domain for each swath
-        swathList = indexToSwathList[index]
-        commonDomainExtent = commonDomainForSwathsInList(dataFolder, swathList)
-        print('    The common domain for all '+str(len(swathList))+' swaths is :')
+        commonDomainExtent = commonDomainForSwathsInList(dataFolder, allSwathsDictionary[index])
+        print('    The common domain for all '+str(len(allSwathsDictionary[index]))+' swaths is:')
         print('        Lat range: min = ' + '{:0.6f}'.format(commonDomainExtent[1]) + ', max = ' + '{:0.6f}'.format(commonDomainExtent[3]))
         print('        Lon range: min = ' + '{:0.6f}'.format(commonDomainExtent[0]) + ', max = ' + '{:0.6f}'.format(commonDomainExtent[2]))
 
         #step 2: resample the swaths at the prescribed resolution within the common swath
         for swathID in swathList:
-            rs.resampler(dataFolder, indexID, swathID, commonDomainExtent, resolutionSet)
+            rs.resampler(dataFolder, indexID, swathID, commonDomainExtent, resolution)
 
 
-dataFolder='/Volumes/mhwood/UCI/Research/Data Repository/Greenland/DEM/GLISTIN/Strips'
-resamplePipeline(dataFolder,indexList=np.arange(1,5))
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    #
+    # Format for adding an argument:
+    # parser.add_argument("-x", "--fullname", action="store", help="comment", default=default value, dest="variable_name",  type=datatype, required=T/F)
+    #
+    parser.add_argument("-d", "--dataFolder", action="store", help="Directory where data will be downloaded.", dest="dataFolder", type=str, required=True)
+
+    parser.add_argument("-r", "--resolution", action="store",
+                        help="Resolutions for the resampling - the default resolution is 50m",
+                        default=50,
+                        dest="resolution", type=int, required=False)
+
+    parser.add_argument("-i", "--indexList", action="store",
+                        help="List of file indices to download - a value of -1 (default) will choose all files. See data availability map to choose indices of interest.", default=-1,
+                        dest="indexList", type=int, nargs='+', required=False)
+
+    parser.add_argument("-y", "--yearSet", action="store", help="Years of file to download, a value of -1 (default) will choose all years.", default=-1, dest="yearSet", type=int, nargs='+',
+                        required=False)
+
+
+    args = parser.parse_args()
+
+    dataFolder = args.dataFolder
+    resolution = args.resolution
+    indexList = args.indexList
+    yearSet = args.yearSet
+
+    if indexList==-1 or -1 in indexList:
+        indexList=np.arange(1,82)
+
+    if yearSet==-1 or -1 in yearSet:
+        yearSet=[2016,2017,2018,2019]
+
+    resamplePipeline(dataFolder,indexList=indexList,resolution=resolution,yearSet=yearSet)
