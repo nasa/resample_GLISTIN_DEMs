@@ -18,7 +18,7 @@ Keywords:
 
 
 
-To resample scripts: use resample_pipeline.py
+To resample data: use resample_pipeline.py
 
 Keywords:
 - dataFolder (-d): Directory where data will be downloaded. (Required)
