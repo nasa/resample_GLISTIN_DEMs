@@ -32,5 +32,8 @@ To resample data: use resample_pipeline.py
 Keywords:
 - dataFolder (-d): Directory where data will be downloaded. (Required)
 - resolution (-r): Resolution for the resampling. Default is 50 m.
-- indexList (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
-- yearList (-y): List of years to resample each swath. (Optional. Default is to download swaths in all available years (2016-2019))
+- fileIndices (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
+- years (-y): List of years to resample each swath. (Optional. Default is to download swaths in all available years (2016-2019))
+- projection (-p): The projection of the output DEM. Input as ESPG:XXXX, default is to use the UTM Zone that corresponds to the center lat/long of the grid.
+- addMetadata (-m): Choose 1 if you would like to add metadata to the file, otherwise choose 0.
+- addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.
