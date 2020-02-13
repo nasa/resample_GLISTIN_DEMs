@@ -37,3 +37,7 @@ Keywords:
 - projection (-p): The projection of the output DEM. Input as ESPG:XXXX, default is to use the UTM Zone that corresponds to the center lat/long of the grid.
 - addMetadata (-m): Choose 1 if you would like to add metadata to the file, otherwise choose 0.
 - addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.
+
+```
+python resample_GLISTIN_DEMs.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 -y 2018 2019 -g 0
+```
