@@ -27,7 +27,7 @@ python download_level_2_data.py -d '/Users/mhwood/Documents/Research/Projects/GL
 
 
 
-To resample data: use resample_pipeline.py
+To resample data: use resample_GLISTIN_DEMs.py
 
 Keywords:
 - dataFolder (-d): Directory where data will be downloaded. (Required)
