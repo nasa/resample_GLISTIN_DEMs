@@ -3,6 +3,20 @@ This set of codes is a toolbox to download and resample GLISTIN-A radar interfer
 
 Required packages: ```numpy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
 
+>> Note: From a fresh anaconda environment this particular sequence of  ....
+```
+pip install requests
+conda install -c conda-forge pyresample
+pip install netCDF4
+pip install xarray
+conda install gdal
+pip install pyproj
+pip install utm
+
+
+```
+
+
 To use these codes,
 1. Determine a directory on your local machine where the Level 1 data and resampled output products will be stored. This directory is referred to as "dataFolder" in the scripts provided.
 2. Determine the indicies of the GLISTIN-A DEMs to downloaded. Refer to Fenty et al 2020 (PUT LINK HERE) for a map indicating the location of swath indices.
