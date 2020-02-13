@@ -20,11 +20,40 @@ Keywords:
 - downloadData (-a): Choose 1 if you would like to download data, otherwise choose 0. (Optional. Default is download data.)
 - downloadMetadata (-m): Choose 1 if you would like to download metadata, otherwise choose 0. (Optional. Default is download metadata.)
 
-Example in command line:
+Example command to download all years for swath index 52:
 ```
-python download_level_2_data.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 -y 2018 2019
+python download_level_2_data.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 
 ```
 
+After downloading you will the following files and directory structure:
+```
+> cd /Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test
+> find .
+
+.
+./Raw
+./Raw/2017
+./Raw/2017/Data
+./Raw/2017/Data/greenl_17914_17037_011_170321_ALTTBB_HH_04.hgt.grd
+./Raw/2017/Metadata
+./Raw/2017/Metadata/greenl_17914_17037_011_170321_ALTTBB_HH_04_metadata.txt
+./Raw/2019
+./Raw/2019/Data
+./Raw/2019/Data/greenl_17914_19022_009_190413_ALTTBB_HH_01.hgt.grd
+./Raw/2019/Metadata
+./Raw/2019/Metadata/greenl_17914_19022_009_190413_ALTTBB_HH_01_metadata.txt
+./Raw/2018
+./Raw/2018/Data
+./Raw/2018/Data/greenl_17914_18014_005_180315_ALTTBB_HH_01.hgt.grd
+./Raw/2018/Metadata
+./Raw/2018/Metadata/greenl_17914_18014_005_180315_ALTTBB_HH_01_metadata.txt
+./Raw/2016
+./Raw/2016/Data
+./Raw/2016/Data/greenl_17914_16037_013_160330_ALTTBB_HH_03.hgt.grd
+./Raw/2016/Metadata
+./Raw/2016/Metadata/greenl_17914_16037_013_160330_ALTTBB_HH_03_metadata.txt
+
+```
 
 
 To resample data: use resample_GLISTIN_DEMs.py
