@@ -1,7 +1,7 @@
 # resample_GLISTIN_DEMs
 This set of codes is a toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
 
-Required packages: numpy, argparse, requests, pyresample, utm, netCDF4
+Required packages: ```numpy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
 
 To use these codes,
 1. Determine a directory on your local machine where the Level 1 data and resampled output products will be stored. This directory is referred to as "dataFolder" in the scripts provided.
