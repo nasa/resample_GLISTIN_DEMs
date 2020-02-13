@@ -20,6 +20,11 @@ Keywords:
 - downloadData (-a): Choose 1 if you would like to download data, otherwise choose 0. (Optional. Default is download data.)
 - downloadMetadata (-m): Choose 1 if you would like to download metadata, otherwise choose 0. (Optional. Default is download metadata.)
 
+Example in command line:
+```
+python download_level_2_data.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 -y 2018 2019
+```
+
 
 
 To resample data: use resample_pipeline.py
@@ -29,4 +34,3 @@ Keywords:
 - resolution (-r): Resolution for the resampling. Default is 50 m.
 - indexList (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
 - yearList (-y): List of years to resample each swath. (Optional. Default is to download swaths in all available years (2016-2019))
-
