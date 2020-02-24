@@ -84,3 +84,17 @@ Keywords:
 ```
 python resample_GLISTIN_DEMs.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 -y 2018 2019 -g 0
 ```
+
+
+To include a geoid file with your resampling, you must include a directory called 'Geoid' within your specified dataFolder that contains your geoid file. We recommend using the GOCO05c geoid, obtained via the following steps:
+1. Go to http://icgem.gfz-potsdam.de/calcgrid
+2. Under Model Selection, choose Longtime Model -> GOCO05c.
+3. Under Functional Selecation, choose geoid.
+4. Under Geographic Selection, set longitude bounds to -75.9 to -9.8, latitude bounds to 55.2 to 86.8, and Grid Step to 0.1.
+5. Leave all other parameters as their default valies, and 'start computation'.
+6. When file is complete, click Download Grid and save to dataFolder/Geoid
+7. Finally, convert this file to a netCDF file using the **geoid_grid_to_nc.py** function.
+
+```
+python Main/geoid_grid_to_nc.py -d '/Volumes/OMG_glistin/Wood' -g 'GOCO05c_383e72b1d9fbea44d4c550a7446ff8fcb6a57aba0bfdd6293a3e4b72f86030aa.gdf'
+```
