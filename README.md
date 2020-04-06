@@ -21,9 +21,9 @@ After the installing the required packages,
 
 ## Steps to Generate Resampled GLISTIN-A DEMs in NetCDF format
 
-1. Download the Level-2 GLISTIN-A DEMs and associated metadata using **download_level_2_data.py**
-2. (Optional) Download a geoid layer to reference the elevation measurements to mean sea level
-3. Resample the Level-2 data using **resample_GLISTIN_DEMs.py**
+1. [Download the Level-2 GLISTIN-A DEMs and associated metadata using **download_level_2_data.py**](https://github.com/mhwood/glistin/blob/master/README.md#step-1-download-the-level-2-data-glistin-a-dems-and-associated-metadata-using-download_level_2_datapy)
+2. [(Optional) Download a geoid layer to reference the elevation measurements to mean sea level](https://github.com/mhwood/glistin#step-2-optional-download-a-geoid-layer-to-reference-the-elevation-measurements-to-mean-sea-level)
+3. [Resample the Level-2 data using **resample_GLISTIN_DEMs.py**](https://github.com/mhwood/glistin#step-3-resample-the-level-2-data-using-resample_glistin_demspy)
 
 ### Step 1: Download the Level-2 data GLISTIN-A DEMs and associated metadata using download_level_2_data.py
 
