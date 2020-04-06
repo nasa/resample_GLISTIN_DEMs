@@ -15,41 +15,34 @@ pip install pyproj
 pip install utm
 ```
 
+After the installing the required packages,
+1. Determine a directory on your local machine where the Level 1 data and resampled output products will be stored. This directory is referred to as "dataFolder" in the scripts provided.
+2. Determine the indicies of the GLISTIN-A DEMs to downloaded. Refer to the map provided [HERE](https://github.com/mhwood/glistin/blob/master/GLISTIN-A_DEM_Index_Domains.pdf) which indicates the location of swath indices.
+
 ## Steps to Generate Resampled GLISTIN-A DEMs in NetCDF format
 
-1. Download the Level-2 GLISTIN-A DEMs and associated metadata using ```download_level_2_data.py```
+1. Download the Level-2 GLISTIN-A DEMs and associated metadata using **download_level_2_data.py**
 2. (Optional) Download a geoid layer to reference the elevation measurements to mean sea level
-3. Resample the Level-2 data using ```resample_GLISTIN_DEMs.py```
+3. Resample the Level-2 data using **resample_GLISTIN_DEMs.py**
 
 ### Step 1: Download the Level-2 data GLISTIN-A DEMs and associated metadata using download_level_2_data.py
 
-To use these codes,
-1. Determine a directory on your local machine where the Level 1 data and resampled output products will be stored. This directory is referred to as "dataFolder" in the scripts provided.
-2. Determine the indicies of the GLISTIN-A DEMs to downloaded. Refer to Fenty et al 2020 (PUT LINK HERE) for a map indicating the location of swath indices.
-3. Download the Level 2 data from NASA's UAVSAR website. Note that the resampling script relies on a particular directory structure to locate the Level 2 data on the local machine within "dataFolder". Please use the **download_level_2_data.py** code to ensure this structure is properly constructed.
-4. Resample (via bin-averaging) the DEM data to a resolution of your choosing using resample_GLISTIN_DEMs.py.
-
-
-
-To download data: use **download_level_2_data.py** to download level 2 data from https://uavsar.jpl.nasa.gov/
+Use **download_level_2_data.py** to download level 2 data from the [UAVSAR website](https://uavsar.jpl.nasa.gov/).
 
 Keywords:
 - dataFolder (-d): Directory where data will be downloaded. (Required)
 - indexList (-i): List of swath indices to download. (Optional. Default is to download all 81 swaths)
 - yearList (-y): List of years to download each swath. (Optional. Default is to download swaths in all available years (2016-2019))
-- downloadData (-a): Choose 1 if you would like to download data, otherwise choose 0. (Optional. Default is download data.)
-- downloadMetadata (-m): Choose 1 if you would like to download metadata, otherwise choose 0. (Optional. Default is download metadata.)
 
 Example command to download all years for swath index 52:
 ```
-python download_level_2_data.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 
+python download_level_2_data.py -d '/path/to/dataFolder' -i 52 
 ```
 
-After downloading you will the following files and directory structure:
+After downloading the data, you will have the following files and directory structure:
 ```
-> cd /Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test
+> cd /path/to/dataFolder
 > find .
-
 .
 ./Raw
 ./Raw/2017
@@ -72,27 +65,11 @@ After downloading you will the following files and directory structure:
 ./Raw/2016/Data/greenl_17914_16037_013_160330_ALTTBB_HH_03.hgt.grd
 ./Raw/2016/Metadata
 ./Raw/2016/Metadata/greenl_17914_16037_013_160330_ALTTBB_HH_03_metadata.txt
-
 ```
 
+### Step 2 (Optional): Download a geoid layer to reference the elevation measurements to mean sea level 
 
-To resample data: use **resample_GLISTIN_DEMs.py**
-
-Keywords:
-- dataFolder (-d): Directory where data will be downloaded. (Required)
-- resolution (-r): Resolution for the resampling. Default is 50 m.
-- fileIndices (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
-- years (-y): List of years to resample each swath. (Optional. Default is to download swaths in all available years (2016-2019))
-- projection (-p): The projection of the output DEM. Input as ESPG:XXXX, default is to use the UTM Zone that corresponds to the center lat/long of the grid.
-- addMetadata (-m): Choose 1 if you would like to add metadata to the file, otherwise choose 0.
-- addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.
-
-```
-python resample_GLISTIN_DEMs.py -d '/Users/mhwood/Documents/Research/Projects/GLISTIN Regridding/Script Test' -i 52 -y 2018 2019 -g 0
-```
-
-
-To include a geoid file with your resampling, you must include a directory called 'Geoid' within your specified dataFolder that contains your geoid file. We recommend using the GOCO05c geoid, obtained via the following steps:
+To include a geoid file with your resampling, you must include a directory called 'Geoid' within your specified dataFolder that contains your geoid file. These scripts are designed to use the GOCO05c geoid, obtained via the following steps:
 1. Go to http://icgem.gfz-potsdam.de/calcgrid
 2. Under Model Selection, choose Longtime Model -> GOCO05c.
 3. Under Functional Selecation, choose geoid.
@@ -101,6 +78,27 @@ To include a geoid file with your resampling, you must include a directory calle
 6. When file is complete, click Download Grid and save to dataFolder/Geoid
 7. Finally, convert this file to a netCDF file using the **geoid_grid_to_nc.py** function.
 
+Example command to convert the geoid grid to a NetCDF file:
 ```
-python Main/geoid_grid_to_nc.py -d '/Volumes/OMG_glistin/Wood' -g 'GOCO05c_383e72b1d9fbea44d4c550a7446ff8fcb6a57aba0bfdd6293a3e4b72f86030aa.gdf'
+python geoid_grid_to_nc.py -d '/path/to/dataFolder' -g 'GOCO05c_383e72b1d9fbea44d4c550a7446ff8fcb6a57aba0bfdd6293a3e4b72f86030aa.gdf'
 ```
+
+### Step 3: Resample the Level-2 data using **resample_GLISTIN_DEMs.py**
+
+To resample data, use **resample_GLISTIN_DEMs.py**
+
+Keywords:
+- dataFolder (-d): Directory where data will be downloaded. (Required)
+- resolution (-r): Resolution for the resampling. Default is 50 m.
+- fileIndices (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
+- years (-y): List of years to resample each swath. (Optional. Default is to download swaths in all available years (2016-2019))
+- projection (-p): The projection of the output DEM. Input as ESPG:XXXX, default is to use the UTM Zone that corresponds to the center lat/long of the grid.
+- addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.
+
+Example command to resample the DEMs for swath index 52 in years 2018 and 2019:
+```
+python resample_GLISTIN_DEMs.py -d '/path/to/dataFolder' -i 52 -y 2018 2019 -g 1
+```
+
+
+
