@@ -1,9 +1,10 @@
 # resample_GLISTIN_DEMs
-This set of codes is a toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
+This set of codes is a Python toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
 
-Required packages: ```numpy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
+## Getting Started
+Required Python packages: ```numpy```,```scipy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
 
->> Note: From a fresh anaconda environment this particular sequence of  ....
+From a fresh anaconda environment, it is recommended to use this installation sequence:
 ```
 pip install requests
 conda install -c conda-forge pyresample
@@ -12,10 +13,15 @@ pip install xarray
 conda install gdal
 pip install pyproj
 pip install utm
-
-
 ```
 
+## Steps to Generate Resampled GLISTIN-A DEMs in NetCDF format
+
+1. Download the Level-2 GLISTIN-A DEMs and associated metadata using ```download_level_2_data.py```
+2. (Optional) Download a geoid layer to reference the elevation measurements to mean sea level
+3. Resample the Level-2 data using ```resample_GLISTIN_DEMs.py```
+
+### Step 1: Download the Level-2 data GLISTIN-A DEMs and associated metadata using download_level_2_data.py
 
 To use these codes,
 1. Determine a directory on your local machine where the Level 1 data and resampled output products will be stored. This directory is referred to as "dataFolder" in the scripts provided.
