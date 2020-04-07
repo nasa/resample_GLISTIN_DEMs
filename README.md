@@ -39,6 +39,12 @@ Example command to download all years for swath index 52:
 python download_level_2_data.py -d '/path/to/dataFolder' -i 52 
 ```
 
+Example command to download all years for swath indices 1,2,3,4, and 5:
+```
+python download_level_2_data.py -d '/path/to/dataFolder' -i 1,2,3,4,5 
+```
+
+
 After downloading the data, you will have the following files and directory structure:
 ```
 > cd /path/to/dataFolder
@@ -91,9 +97,9 @@ Keywords:
 - dataFolder (-d): Directory where data will be downloaded. (Required)
 - resolution (-r): Resolution for the resampling. Default is 50 m.
 - fileIndices (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
-- years (-y): List of years to resample each swath. (Optional. Default is to download swaths in all available years (2016-2019))
-- projection (-p): The projection of the output DEM. Input as ESPG:XXXX, default is to use the UTM Zone that corresponds to the center lat/long of the grid.
-- addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.
+- years (-y): List of years to resample each swath. (Optional.  Default is to download swaths in all available years (2016-2019))
+- projection (-p): The projection of the output DEM. Input as ESPG:XXXX.  Default is to use the UTM Zone that corresponds to the center lat/long of the grid.
+- addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.  Default is 0
 
 Example command to resample the DEMs for swath index 52 in years 2018 and 2019:
 ```
