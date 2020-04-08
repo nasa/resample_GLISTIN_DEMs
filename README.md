@@ -30,9 +30,9 @@ After the installing the required packages,
 Use **download_level_2_data.py** to download level 2 data from the [UAVSAR website](https://uavsar.jpl.nasa.gov/).
 
 Keywords:
-- dataFolder (-d): Directory where data will be downloaded. (Required)
-- indexList (-i): List of swath indices to download. (Optional. Default is to download all 81 swaths)
-- yearList (-y): List of years to download each swath. (Optional. Default is to download swaths in all available years (2016-2019))
+- dataFolder (-d): (Required) Directory where data will be downloaded.
+- swathIndices (-i): (Optional) List of swath indices to download. See data availability map on github.com/NASA/glistin to choose indices of interest. A value of -1 will choose all files. Default value is -1.
+- years (-y): (Optional)  List of years to download. A value of -1 will choose all years (2016-2019 as available). Default value is -1.
 
 Example command to download all years for swath index 52:
 ```
@@ -94,12 +94,12 @@ python geoid_grid_to_nc.py -d '/path/to/dataFolder' -g 'GOCO05c_383e72b1d9fbea44
 To resample data, use **resample_GLISTIN_DEMs.py**
 
 Keywords:
-- dataFolder (-d): Directory where data will be downloaded. (Required)
-- resolution (-r): Resolution for the resampling. Default is 50 m.
-- fileIndices (-i): List of swath indices to resample. (Optional. Default is to resample all 81 swaths)
-- years (-y): List of years to resample each swath. (Optional.  Default is to download swaths in all available years (2016-2019))
-- projection (-p): The projection of the output DEM. Input as ESPG:XXXX.  Default is to use the UTM Zone that corresponds to the center lat/long of the grid.
-- addGeoid (-g): Choose 1 if you would like to add a geoid correction to the file, otherwise choose 0.  Default is 0
+- dataFolder (-d): (Required) Directory where resampled data will be stored.
+- resolution (-r): (Optional) Resolution for the resampling. Default resolution is 50m.
+- swathIndices (-i): (Optional) List of swath indices to resample. See data availability map on github.com/NASA/glistin to choose indices of interest. A value of -1 will choose all files. Default value is -1.
+- years (-y): (Optional) List of years to resample. A value of -1 will choose all years (2016-2019 as available). Default value is -1.
+- projection (-p): (Optional) The projection of the output DEM. Input with an EPSG reference code as EPSG:XXXX or 'UTM'. 'UTM' is the default value and will choose the UTM zone that corresponds to the center lat/long of the grid. This data spans UTM zones 19N to 27N.
+- addGeoid (-g): (Optional) Choose 1 if you would like to add a geoid correction to the file. Must be downloaded manually prior to running this script using the instructions provided on github.com/NASA/glistin). Default value is 0 (i.e. do not include a geoid file).resolution
 
 Example command to resample the DEMs for swath index 52 in years 2018 and 2019:
 ```
