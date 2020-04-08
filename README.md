@@ -38,18 +38,18 @@ Keywords:
  
 - years (-y): (Optional) Set of years to download, separated by spaces. Default: -1 (download swaths in all years 2016-2019). 
 
-Example command to download all available years of data for swath index 52:
-```
-python download_level_2_data.py -d '/path/to/dataFolder' -i 52 
-```
-
 Example command to download only years 2016 and 2017 for swath indices 1,2,3,4, and 52:
 ```
 python download_level_2_data.py -d '/path/to/dataFolder' -y 2016 2017 -i 1 2 3 4 52
 ```
 
 
-After downloading the data, you will have the following files and directory structure that should look like the following:
+Example command to download all available years of data for swath index 52:
+```
+python download_level_2_data.py -d '/path/to/dataFolder' -i 52 
+```
+
+After downloading the above example (swath 52, all years), you will have a directory structure with files that should look like the following:
 ```
 > cd /path/to/dataFolder
 > find .
