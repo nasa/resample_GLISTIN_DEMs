@@ -134,6 +134,6 @@ For example, swath 16 is a relatively small swath and the following wall-clock t
 - 500 m: X seconds
 
 As another example, swath 1 is a relatively large swath and the following wall-clock times were required for the resample:
-- 50 m: X seconds
+- 50 m: 162 seconds
 - 100 m: 276 seconds
-- 500 m: X seconds
+- 500 m: 3842 seconds
