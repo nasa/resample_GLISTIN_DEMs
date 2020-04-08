@@ -13,6 +13,7 @@ pip install xarray
 conda install gdal
 pip install pyproj
 pip install utm
+pip install bs4
 ```
 
 After the installing the required packages,
