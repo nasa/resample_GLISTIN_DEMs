@@ -124,3 +124,16 @@ Example command to resample the DEMs for swath indices 1 2 3 4 and 52 in years 2
 ```
 python resample_GLISTIN_DEMs.py -d '/path/to/dataFolder' -i 1 2 3 4 52 -y 2018 2019 -g 1 -r 500
 ```
+
+#### Benchmarks
+The time required to resample the GLISTIN-A DEM data is a function of both resolution and the size of the initial swath. The resample time will increase with the requested grid spacing and number of points in the initital swath.
+
+For example, swath 16 is a relatively small swath and the following wall-clock times were required for the resample:
+- 50 m: X seconds
+- 100 m: X seconds
+- 500 m: X seconds
+
+As another example, swath 1 is a relatively large swath and the following wall-clock times were required for the resample:
+- 50 m: X seconds
+- 100 m: 276 seconds
+- 500 m: X seconds
