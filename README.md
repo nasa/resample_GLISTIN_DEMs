@@ -10,7 +10,7 @@ pip install requests
 conda install -c conda-forge pyresample
 pip install netCDF4
 pip install xarray
-conda install gdal
+conda install -c conda-forge gdal
 pip install pyproj
 pip install utm
 pip install bs4
