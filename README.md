@@ -39,9 +39,9 @@ Example command to download all years for swath index 52:
 python download_level_2_data.py -d '/path/to/dataFolder' -i 52 
 ```
 
-Example command to download all years for swath indices 1,2,3,4, and 5:
+Example command to download years 2016 and 2017 for swath indices 1,2,3,4, and 5:
 ```
-python download_level_2_data.py -d '/path/to/dataFolder' -i 1,2,3,4,5 
+python download_level_2_data.py -d '/path/to/dataFolder' -i 1 2 3 4 5 -y 2016 2017 
 ```
 
 
