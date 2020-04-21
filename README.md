@@ -2,7 +2,7 @@
 This set of codes is a Python toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
 
 The official OMG GLISTIN-A data product is hosted on NASA's PO.DAAC: 
-<a href="https://podaac.jpl.nasa.gov/dataset/OMG_L3_ICE_ELEV_GLISTINA?ids=&values=&search=glistin-a">OMG_L3_ICE_ELEV_GLISTINA</a>
+<a href="https://podaac.jpl.nasa.gov/dataset/OMG_L3_ICE_ELEV_GLISTINA">OMG_L3_ICE_ELEV_GLISTINA</a>
 
 <br>
 <b>Swath Locations and Numbers</b>
@@ -31,7 +31,7 @@ pip install bs4
 
 After the installing the required packages,
 1. Determine a directory on your local machine where the Level 1 data and resampled output products will be stored. This directory is referred to as "dataFolder" in the scripts provided.
-2. Determine the indicies of the GLISTIN-A DEMs to downloaded. Refer to the map provided [HERE](https://github.com/mhwood/glistin/blob/master/GLISTIN-A_DEM_Index_Domains.pdf) which indicates the location of swath indices.
+2. Determine the indicies of the GLISTIN-A DEMs to downloaded. Refer to the <a href="GLISTIN-A_DEM_Index_Domains.pdf">Swath Location Map</a> to see the indices of all swaths.
 
 ## Steps to Generate Resampled GLISTIN-A DEMs in NetCDF format
 
