@@ -1,7 +1,9 @@
 # resample_GLISTIN_DEMs
 This set of codes is a Python toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
 
-The official OMG GLISTIN-A data product is hosted on NASA's PO.DAAC:<a href="https://podaac.jpl.nasa.gov/dataset/OMG_L3_ICE_ELEV_GLISTINA?ids=&values=&search=glistin-a>OMG_L3_ICE_ELEV_GLISTINA</a>
+The official OMG GLISTIN-A data product is hosted on NASA's PO.DAAC: 
+<a href="https://podaac.jpl.nasa.gov/dataset/OMG_L3_ICE_ELEV_GLISTINA?ids=&values=&search=glistin-a">OMG_L3_ICE_ELEV_GLISTINA</a>
+         
 <br>
 
 <b>Swath Locations and Numbers</b>
