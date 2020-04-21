@@ -3,16 +3,12 @@ This set of codes is a Python toolbox to download and resample GLISTIN-A radar i
 
 The official OMG GLISTIN-A data product is hosted on NASA's PO.DAAC: 
 <a href="https://podaac.jpl.nasa.gov/dataset/OMG_L3_ICE_ELEV_GLISTINA?ids=&values=&search=glistin-a">OMG_L3_ICE_ELEV_GLISTINA</a>
-         
-<br>
 
 <b>Swath Locations and Numbers</b>
-<br>
-<img src="GLISTIN-A_DEM_Index_Domains.jpg" width=400 title="GLISTIN Swath Locations">
+<img src="GLISTIN-A_DEM_Index_Domains.jpg" width=400 space="60" align="left" title="GLISTIN Swath Locations">
 
 <b>Example gridded swath after resampling</b>
-<br>
-<img src="https://podaac.jpl.nasa.gov/Podaac/thumbnails/OMG_L3_ICE_ELEV_GLISTINA.jpg" width=400 title="GLISTIN Swath Locations">
+<img src="https://podaac.jpl.nasa.gov/Podaac/thumbnails/OMG_L3_ICE_ELEV_GLISTINA.jpg" width=300 align="right" title="GLISTIN Swath Locations">
 
 <br>
 
