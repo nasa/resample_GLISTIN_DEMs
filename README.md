@@ -6,14 +6,13 @@ The official OMG GLISTIN-A data product is hosted on NASA's PO.DAAC:
 
 <br>
 <b>Swath Locations and Numbers</b>
-<img src="GLISTIN-A_DEM_Index_Domains.jpg" width=400 space="60" align="left" title="GLISTIN Swath Locations">
+<img src="GLISTIN-A_DEM_Index_Domains.jpg" width=300   title="GLISTIN Swath Locations">
 
 <br>
 <b>Example gridded swath after resampling</b>
-<img src="https://podaac.jpl.nasa.gov/Podaac/thumbnails/OMG_L3_ICE_ELEV_GLISTINA.jpg" width=300 align="right" title="GLISTIN Swath Locations">
+<img src="https://podaac.jpl.nasa.gov/Podaac/thumbnails/OMG_L3_ICE_ELEV_GLISTINA.jpg" width=300  title="GLISTIN Swath Locations">
 
-<br>
-<br>
+<br><br>
 
 ## Getting Started
 Required Python packages: ```numpy```,```scipy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
