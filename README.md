@@ -1,6 +1,14 @@
 # resample_GLISTIN_DEMs
 This set of codes is a Python toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
 
+<b>Swath Locations and Numbers<b>
+<img src="GLISTIN-A_DEM_Index_Domains.jpg" width=400 title="GLISTIN Swath Locations">
+
+<b>Example gridded swath after resampling<b>
+ 
+<img src="https://podaac.jpl.nasa.gov/Podaac/thumbnails/OMG_L3_ICE_ELEV_GLISTINA.jpg" width=400 title="GLISTIN Swath Locations">
+
+
 ## Getting Started
 Required Python packages: ```numpy```,```scipy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
 
