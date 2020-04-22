@@ -92,13 +92,16 @@ After downloading the above example (swath 52, all years), you will have a direc
 
 ### Step 2 (Optional): Download a geoid layer to reference the elevation measurements to mean sea level 
 
-To include a geoid file with your resampling, you must include a directory called 'Geoid' within your specified dataFolder that contains your geoid file. These scripts are designed to use the GOCO05c geoid, obtained via the following steps:
+To include a geoid file with your resampling, you must include a directory called 'Geoid' within your specified dataFolder that contains your geoid file. Feel free to use any geoid that suits your purposes.  Here use the
+<a href=https://link.springer.com/article/10.1007/s10712-016-9406-y>GOC05c geoid</a> of Fetcher et al. [2017].
+
+To obtain the GOCO05c geoid and prepare it for use in resample_GLISTIN_DEMs, follow the following steps:
 1. Go to http://icgem.gfz-potsdam.de/calcgrid
 2. Under Model Selection, choose Longtime Model -> GOCO05c.
-3. Under Functional Selecation, choose geoid.
+3. Under Functional Selection, choose geoid.
 4. Under Geographic Selection, set longitude bounds to -75.9 to -9.8, latitude bounds to 55.2 to 86.8, and Grid Step to 0.1.
 5. Leave all other parameters as their default valies, and 'start computation'.
-6. When file is complete, click Download Grid and save to dataFolder/Geoid
+6. When file is complete, click Download Grid and save to **dataFolder/Geoid**
 7. Finally, convert this file to a netCDF file using the **geoid_grid_to_nc.py** function.
 
 Example command to convert the geoid grid to a NetCDF file:
@@ -106,7 +109,7 @@ Example command to convert the geoid grid to a NetCDF file:
 python geoid_grid_to_nc.py -d '/path/to/dataFolder' -g 'GOCO05c_383e72b1d9fbea44d4c550a7446ff8fcb6a57aba0bfdd6293a3e4b72f86030aa.gdf'
 ```
 
-To use a different geoid, you may have to modify geoid_grid_to_nc.py.
+To use a different geoid, you will likely have to modify **geoid_grid_to_nc.py**.
 
 
 ### Step 3: Resample the Level-2 data using **resample_GLISTIN_DEMs.py**
