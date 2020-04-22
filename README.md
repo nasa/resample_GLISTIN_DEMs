@@ -27,6 +27,7 @@ conda install -c conda-forge gdal
 pip install pyproj
 pip install utm
 pip install bs4
+conda install -c conda-forge scipy
 ```
 
 After the installing the required packages,
