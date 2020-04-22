@@ -12,11 +12,12 @@ import resample_functions as rf
 import numpy as np
 import swath_references as ref
 import argparse
+from pathlib import Path
 
 def resample_DEM(dataFolder,year,swathIndex,resolution,projection,printStatus=True):
     if printStatus:
-        print('Resampling DEM with index '+str(swathIndex)+' in year '+str(year)+' at a resolution of '+str(resolution)+'m in projection '+projection)
-
+        print('\nResampling DEM with index '+str(swathIndex)+' in year '+str(year)+' at a resolution of '+str(resolution)+'m in projection '+projection)
+    
     #step 1: for a given swath, find an extent which encompasses all available DEMs 2016-2019
     common_index_extent = rf.find_common_index_extent(dataFolder,swathIndex,printStatus)
 
@@ -34,22 +35,24 @@ def resample_DEM(dataFolder,year,swathIndex,resolution,projection,printStatus=Tr
 
 
 def resample_GLISTIN_DEMs(dataFolder,years,swathIndices,resolution,projection, addGeoid=False):
-    print('Running resample_GLISTIN_DEMs with the following parameters:')
-    print('    dataFolder (-d)')
-    print('        '+dataFolder)
-    print('    resolution (-r)')
-    print('        '+str(resolution)+' m (Default: 50 m)')
-    print('    swathIndices (-i)')
-    if len(swathIndices)==81:
-        print('        1-81 (Default: 1-81)')
+    print('\nRunning resample_GLISTIN_DEMs with the following parameters:')
+    print('    dataFolder (-d)   : '+ str(dataFolder))
+    print('    resolution (-r)   : '+ str(resolution)+' m (Default: 50 m)')
+    if len(swathIndices) == 81:
+        print('    swathIndices (-i) : 1-81 (Default: -1=all swaths)')
     else:
-        print('        '+str(swathIndices)[1:-1]+' (Default: 1-81)')
-    print('    years (-y)')
-    print('        '+str(years)[1:-1]+' (Default: 2016,2017,2018,2019)')
-    print('    projection (-p)')
-    print('        '+projection+' (Default: \'UTM\')')
-    print('    addGeoid (-g)')
-    print('        '+str(addGeoid)+' (Default: False)')
+        print('    swathIndices (-i) : '+ str(swathIndices)[1:-1]+' (Default: 1-81)')
+
+    print('    years (-y)        : '+ str(years)[1:-1]+' (Default: 2016,2017,2018,2019)')
+    print('    projection (-p)   : '+ projection+' (Default: \'UTM\')')
+    print('    addGeoid (-g)     : '+ str(addGeoid)+' (Default: 0=False)\n')
+
+    if dataFolder.exists():
+        print('Searching for downloaded swath data from ' + str(dataFolder))
+    else:
+        print('Specified directory with downloaded swath data does not exist: ' + str(dataFolder))
+        print('... aborting program')
+        exit()
 
     rf.create_directory_structure(dataFolder, resolution, swathIndices, projection)
 
@@ -76,9 +79,10 @@ def resample_GLISTIN_DEMs(dataFolder,years,swathIndices,resolution,projection, a
 
                 import metadata_functions as mf
                 mf.add_DEM_metadata(dataFolder, year, swathIndex, resolution, projection, addGeoid)
-    print('Resample Summary:')
+
+    print('\nResample Summary:')
     print('    Resampled '+str(counter)+' DEM(s) at a resolution of '+str(resolution)+' m in the '+projection+' projection')
-    print('    Files saved in ' + dataFolder)
+    print('    Files saved in ' + str(dataFolder))
     print('    Requested years: ' + str(years)[1:-1])
     print('    Requested indicies: ' + str(swathIndices)[1:-1])
 
@@ -121,6 +125,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     dataFolder = args.dataFolder
+    dataFolder = Path(dataFolder)
     resolution = args.resolution
     swathIndices = args.swathIndices
     years = args.years
