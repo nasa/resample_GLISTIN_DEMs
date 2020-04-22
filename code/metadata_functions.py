@@ -1,4 +1,4 @@
-# Copyright 2020, by the California Institute of Technology.
+# Copyrighrt 2020, by the California Institute of Technology.
 # ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 # Any commercial use must be negotiated with the Office of Technology Transfer at the California Institute of Technology.
 # This software may be subject to U.S. export control laws.
@@ -26,7 +26,13 @@ from bs4 import BeautifulSoup
 #step 1: read in the variables from the regridded file
 
 def read_regridded_swath(filePath):
-    data = xr.open_dataset(filePath)
+    print('        Opening ' + str(filePath))
+
+    if filePath.exists():
+        data = xr.open_dataset(str(filePath))
+    else:
+        print(' regridded swath file not found!  aborting!')
+        exit()
 
     variables = []
     variableNames = []
@@ -183,14 +189,22 @@ def main_attribute_dictionary(dataFolder,regridded_filepath,resolution,elevation
     minElev = np.min(np.min(elevation[elevation < nc4.default_fillvals['f8']]))
     maxElev = np.max(np.max(elevation[elevation < nc4.default_fillvals['f8']]))
 
-    regridded_file = os.path.split(regridded_filepath)[-1]
+#    regridded_file = os.path.split(regridded_filepath)[-1]
+    regridded_file = regridded_filepath.name
+
     fileID = regridded_file[:-3]
 
     minTime, maxTime, timeDuration = read_timespan_from_metadata(dataFolder, fileID)
 
-    creationDate = os.stat(regridded_filepath).st_birthtime
-    creationDate = datetime.datetime.utcfromtimestamp(creationDate)
-    modifiedDate = datetime.datetime.utcnow()
+#    creationDate = os.stat(regridded_filepath).st_birthtime
+#    creationDate = datetime.datetime.utcfromtimestamp(creationDate)
+#    modifiedDate = datetime.datetime.utcnow()
+
+    creationDate = round(regridded_filepath.stat().st_ctime)
+    creationDate = datetime.datetime.fromtimestamp(creationDate)
+
+    modifiedDate = round(regridded_filepath.stat().st_mtime)
+    modifiedDate = datetime.datetime.fromtimestamp(modifiedDate)
 
     attributeDictionary = {'title': 'OMG GLISTIN-A Elevation Data of Greenland Glaciers and Coastline',
                            'summary': 'Elevation measurements of the Greenland coastline measured by the Glacier and Land Ice Surface ' \
@@ -284,6 +298,7 @@ def write_global_attributes(dataset,dataFolder,regridded_filepath,resolution,var
                 'date_created']
 
     globalAttrDict = main_attribute_dictionary(dataFolder,regridded_filepath,resolution,elevation,longitude,latitude,projection)
+    print("        Adding global metadata")
     for attribute in attributes:
         if attribute in globalAttrDict.keys():
             dataset.attrs[attribute] = globalAttrDict[attribute]
@@ -305,6 +320,7 @@ def write_variables_attributes(dataset,variables,variableNames,coordinates,coord
 
     EPSG = projection.split(':')[1]
 
+    print("        Adding variable metadata")
     dataset['elevation'].attrs['long_name'] = 'Surface elevation relative to the WGS1984 ellipsoid'
     dataset['elevation'].attrs['standard_name'] = 'surface_altitude'
     dataset['elevation'].attrs['units'] = 'meters'
@@ -406,7 +422,7 @@ def write_projection_attributes(dataset,coordinates,coordinateNames,projection,r
     wkt = soup.get_text()
     # spatial_ref = wkt.replace(" ", "")
     spatial_ref = " ".join(wkt.split())
-
+    print("        Adding projection metadata")
     dataset['projection'].attrs['grid_boundary_top_projected_y'] = np.max(y)
     dataset['projection'].attrs['grid_boundary_bottom_projected_y'] = np.min(y)
     dataset['projection'].attrs['grid_boundary_right_projected_x'] = np.max(x)
@@ -442,6 +458,7 @@ def write_coordinates_attributes(dataset, coordinates,coordinateNames):
     x = coordinates[coordinateNames.index('x')]
     y = coordinates[coordinateNames.index('y')]
 
+    print("        Adding coordinate metadata")
     dataset['x'].attrs['long_name'] = 'Cartesian x-coordinate'
     dataset['x'].attrs['standard_name'] = 'projection_x_coordinate'
     dataset['x'].attrs['units'] = 'meters'
@@ -472,7 +489,7 @@ def write_geoid_attributes(dataset,variables,variableNames,projection):
 
     geoid = variables[variableNames.index('geoid')]
     EPSG = projection.split(':')[1]
-
+    print("        Adding geoid metadata")
     dataset['geoid'].attrs['long_name'] = 'GOCO05C Geoid - WGS84 Ellipsoid difference'
     dataset['geoid'].attrs['standard_name'] = 'geoid_height_above_reference_ellipsoid'
     dataset['geoid'].attrs['units'] = 'meters'
@@ -494,16 +511,20 @@ def write_geoid_attributes(dataset,variables,variableNames,projection):
 
 def add_DEM_metadata(dataFolder, year, fileIndex, resolution, projection, addGeoid, printStatus=True):
     if printStatus:
-        print("    Step 6: Adding metadata to file...")
+        print("    Step 6: Adding DEM metadata to file...")
 
     if 'EPSG' in projection:
         baseDirectory = 'Resampled_' + str(resolution) + 'm_' + projection.split(':')[1]
     else:
         baseDirectory = 'Resampled_' + str(resolution) + 'm'
 
-    regridded_folder = os.path.join(dataFolder, baseDirectory,'OMG_Ice_GLISTIN-A_L3_' + '{:02d}'.format(fileIndex))
+    #regridded_folder = os.path.join(dataFolder, baseDirectory,'OMG_Ice_GLISTIN-A_L3_' + '{:02d}'.format(fileIndex))
+    regridded_folder = dataFolder.joinpath(baseDirectory,'OMG_Ice_GLISTIN-A_L3_' + '{:02d}'.format(fileIndex))
+
     regridded_file = ref.indexAndYearToFileID(fileIndex, year)+'.nc'
-    regridded_filepath = os.path.join(regridded_folder,regridded_file)
+    #regridded_filepath = os.path.join(regridded_folder,regridded_file)
+
+    regridded_filepath = regridded_folder.joinpath(regridded_file)
 
     #step 1: read in the variables from the regridded file
     variables,variableNames,coordinates,coordinateNames,projection = read_regridded_swath(regridded_filepath)
@@ -527,5 +548,13 @@ def add_DEM_metadata(dataFolder, year, fileIndex, resolution, projection, addGeo
     if addGeoid:
         dataset = write_geoid_attributes(dataset, variables, variableNames, projection)
 
-    os.remove(regridded_filepath)  # remove the old file so that the new one can be saved in its place
-    dataset.to_netcdf(regridded_filepath)
+#    os.remove(regridded_filepath)  # remove the old file so that the new one can be saved in its place
+    try: 
+        regridded_filepath.unlink()
+    except:
+        print('could not unlink ' + str(regridded_filepath))
+        print(' ... aborting!')
+        exit()
+ 
+    print("        Saving updated NetCDF file.")
+    dataset.to_netcdf(str(regridded_filepath))

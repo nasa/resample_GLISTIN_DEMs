@@ -17,6 +17,7 @@ import time
 import math
 from pyproj import Proj, transform
 import swath_references as ref
+from pathlib import Path
 
 ########################################################################################################################
 # These are functions used throughout all main steps
@@ -27,19 +28,37 @@ def create_directory_structure(dataFolder,resolution,fileIndices,projection):
     else:
         baseDirectory = 'Resampled_'+str(resolution)+'m'
 
-    if baseDirectory not in os.listdir(dataFolder):
-        os.mkdir(os.path.join(dataFolder,baseDirectory))
+    tmpDir = dataFolder / Path(baseDirectory)
+
+    print('Creating ' + str(tmpDir))
+    if not tmpDir.exists():
+        try:
+            tmpDir.mkdir(exist_ok=True)
+        except:
+            print('.. could not create ' + str(tmpDir))
+
+#    if baseDirectory not in os.listdir(dataFolder):
+#        os.mkdir(os.path.join(dataFolder,baseDirectory))
 
     for fileIndex in fileIndices:
-        if 'OMG_Ice_GLISTIN-A_L3_'+'{:02d}'.format(fileIndex) not in os.listdir(os.path.join(dataFolder,baseDirectory)):
-            os.mkdir(os.path.join(dataFolder,baseDirectory,'OMG_Ice_GLISTIN-A_L3_'+'{:02d}'.format(fileIndex)))
-
+#        if 'OMG_Ice_GLISTIN-A_L3_'+'{:02d}'.format(fileIndex) not in os.listdir(os.path.join(dataFolder,baseDirectory)):
+#            os.mkdir(os.path.join(dataFolder,baseDirectory,'OMG_Ice_GLISTIN-A_L3_'+'{:02d}'.format(fileIndex)))
+         tmpDir2 = tmpDir.joinpath('OMG_Ice_GLISTIN-A_L3_' + '{:02d}'.format(fileIndex))
+         print('Creating ' + str(tmpDir2))
+         try:
+            tmpDir2.mkdir(exist_ok=True)
+         except:
+            print('.. could not create ' + str(tmpDir2))
 
 def read_metadata_dictionary(dataFolder,fileID):
     swathID = ref.fileNameToSwathID(fileID)
     # print('        Original data file: '+swathID)
     metadata_dictionary={}
-    with open(os.path.join(dataFolder,'Raw',fileID.split('_')[-2][:4],'Metadata',swathID+'_metadata.txt'), "r") as f:
+    metadata_file = dataFolder.joinpath('Raw',fileID.split('_')[-2][:4],'Metadata',swathID+'_metadata.txt')
+    print('        Reading metadata from ' + str(metadata_file))
+
+    with open(str(metadata_file), "r") as f:
+   #  with open(os.path.join(dataFolder,'Raw',fileID.split('_')[-2][:4],'Metadata',swathID+'_metadata.txt'), "r") as f:
         lines = f.readlines()
         idx = 0
         for line in lines:
@@ -132,8 +151,10 @@ def read_swath_and_create_geometry(dataFolder,fileIndex,year,printStatus):
     metadata_dictionary = read_metadata_dictionary(dataFolder, fileID)
 
     swathID = ref.fileNameToSwathID(fileID)
-    dataPath = os.path.join(dataFolder, 'Raw', str(year), 'Data', swathID + '.hgt.grd')
-    g = np.fromfile(dataPath, dtype='<f4')
+    dataPath = dataFolder.joinpath('Raw', str(year), 'Data', swathID + '.hgt.grd')
+
+#    dataPath = os.path.join(dataFolder, 'Raw', str(year), 'Data', swathID + '.hgt.grd')
+    g = np.fromfile(str(dataPath), dtype='<f4')
     grid = np.reshape(g, (metadata_dictionary['GRD Latitude Lines'], metadata_dictionary['GRD Longitude Samples']))
     if printStatus:
         print('        Preparing original geometry of the swath from metadata')
@@ -244,13 +265,23 @@ def calculate_resampled_grid(area_original,grid,area_new,resolution,printStatus)
     wf = lambda r: 1.0
     start_time = time.time()
 
-    radiusOfInfluence=math.sqrt(2) * (resolution / 2.0)
-    nNeighborsMax = int((np.pi*(radiusOfInfluence+1)**2)/9)
+    radiusOfInfluence=math.sqrt(2.0) * (resolution / 2.0)
+
+    #assuming that original data comes in 3 m grid
+    nNeighborsMax = int((np.pi*(radiusOfInfluence+1.0)**2)/9.0)
+
+    #assuming that original data comes in 2 m grid
+    nNeighborsMax_alt = int((np.pi*(radiusOfInfluence+1.0)**2)/4.0)
+
+    print("        Averaging up to " + str(nNeighborsMax_alt) + " values from the original GLISTIN data for each new grid cell")
+    print("          (the # of points within a circle with r=" + str(round(radiusOfInfluence,0)) + "m ")
+    print("           assuming 2m separation of original GLISTIN data, and using r equal to the distance")
+    print("           between the center of each new grid cell and its corners: r=sqrt(2)*new grid resolution/2")
 
     output =  kd_tree.resample_custom(area_original, grid, area_new, radius_of_influence=radiusOfInfluence,
-                                      fill_value=np.nan, neighbours=nNeighborsMax, weight_funcs=wf, with_uncert=True)
+                                      fill_value=np.nan, neighbours=nNeighborsMax_alt, weight_funcs=wf, with_uncert=True)
     if printStatus:
-        print("        Resampling calculation time: %s seconds" % (time.time() - start_time))
+        print("        Resampling calculation time: %s seconds" % round((time.time() - start_time),2))
 
 
     result = output[0]
@@ -279,10 +310,16 @@ def save_resample(dataFolder,year,fileIndex,resolution,projection,x,y,output_gri
     else:
         baseDirectory = 'Resampled_' + str(resolution) + 'm_' + projection.split(':')[1]
 
-    output_folder = os.path.join(dataFolder,baseDirectory,'OMG_Ice_GLISTIN-A_L3_'+ '{:02d}'.format(fileIndex))
+#    output_folder = os.path.join(dataFolder,baseDirectory,'OMG_Ice_GLISTIN-A_L3_'+ '{:02d}'.format(fileIndex))
+    output_folder = dataFolder.joinpath(baseDirectory,'OMG_Ice_GLISTIN-A_L3_'+ '{:02d}'.format(fileIndex))
+
     output_file = ref.indexAndYearToFileID(fileIndex, year)+'.nc'
-    if output_file in os.listdir(output_folder):
-        os.remove(os.path.join(output_folder,output_file))
+
+#    if output_file in os.listdir(output_folder):
+#        os.remove(os.path.join(output_folder,output_file))
+    if output_folder.joinpath(output_file).is_file():
+        print('        Removing old version of ' + output_file)
+        output_folder.joinpath(output_file).unlink()
 
 
     swath = xr.Dataset( \
@@ -297,4 +334,6 @@ def save_resample(dataFolder,year,fileIndex,resolution,projection,x,y,output_gri
 
     swath['projection'].attrs['EPSG'] = projection
 
-    swath.to_netcdf(os.path.join(output_folder,output_file))
+    #swath.to_netcdf(os.path.join(output_folder,output_file))
+    print ('        Saving to NetCDF ' + str(output_file))
+    swath.to_netcdf(str(output_folder.joinpath(output_file)))
