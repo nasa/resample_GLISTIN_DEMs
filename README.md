@@ -35,9 +35,9 @@ After the installing the required packages,
 
 ## Steps to Generate Resampled GLISTIN-A DEMs in NetCDF format
 
-1. [Download the Level-2 GLISTIN-A DEMs and associated metadata using **download_level_2_data.py**](https://github.com/mhwood/glistin/blob/master/README.md#step-1-download-the-level-2-data-glistin-a-dems-and-associated-metadata-using-download_level_2_datapy)
-2. [(Optional) Download a geoid layer to reference the elevation measurements to mean sea level](https://github.com/mhwood/glistin#step-2-optional-download-a-geoid-layer-to-reference-the-elevation-measurements-to-mean-sea-level)
-3. [Resample the Level-2 data using **resample_GLISTIN_DEMs.py**](https://github.com/mhwood/glistin#step-3-resample-the-level-2-data-using-resample_glistin_demspy)
+1. Download the Level-2 GLISTIN-A DEMs and associated metadata using **download_level_2_data.py**
+2. (Optional) Download a geoid layer to reference the elevation measurements to mean sea level
+3. Resample the Level-2 data using **resample_GLISTIN_DEMs.py** 
 
 ### Step 1: Download the Level-2 data GLISTIN-A DEMs and associated metadata using download_level_2_data.py
 
@@ -47,7 +47,6 @@ Keywords:
 - dataFolder (-d): (Required) Directory where resampled data will be stored on local machine.
 
 - swathIndices (-i): (Optional) Set of swath indices to resample, separated by spaces.  Default is -1: resample all swaths.
- Map of locations of each swath index is here: github.com/NASA/glistin 
  
 - years (-y): (Optional) Set of years to download, separated by spaces. Default: -1 (download swaths in all years 2016-2019). 
 
@@ -119,7 +118,6 @@ Keywords:
 - resolution (-r): (Optional) Horizontal resolution in meters of the new grid used for the resampling. Default: 50 (meters).
 
 - swathIndices (-i): (Optional) Set of swath indices to resample, separated by spaces.  Default is -1: resample all swaths.
- Map of locations of each swath index is here: github.com/NASA/glistin 
 
 - years (-y): (Optional) Set of years to resample, separated by spaces. Default: -1 (resample swaths in all years 2016-2019). 
 
