@@ -153,8 +153,11 @@ def read_swath_and_create_geometry(dataFolder,fileIndex,year,printStatus):
     swathID = ref.fileNameToSwathID(fileID)
     dataPath = dataFolder.joinpath('Raw', str(year), 'Data', swathID + '.hgt.grd')
 
-#    dataPath = os.path.join(dataFolder, 'Raw', str(year), 'Data', swathID + '.hgt.grd')
     g = np.fromfile(str(dataPath), dtype='<f4')
+
+    # cast to float 2
+    g = g.astype(np.dtype('<f2'))
+
     grid = np.reshape(g, (metadata_dictionary['GRD Latitude Lines'], metadata_dictionary['GRD Longitude Samples']))
     if printStatus:
         print('        Preparing original geometry of the swath from metadata')
@@ -267,24 +270,23 @@ def calculate_resampled_grid(area_original,grid,area_new,resolution,printStatus)
 
     radiusOfInfluence=math.sqrt(2.0) * (resolution / 2.0)
 
-    #assuming that original data comes in 3 m grid
-    nNeighborsMax = int((np.pi*(radiusOfInfluence+1.0)**2)/9.0)
+    #assuming that original data comes in 2.45 m grid (2.45^2 = 6)
+    nNeighborsMax = int((np.pi*(radiusOfInfluence+1.0)**2)/6.0)
 
-    #assuming that original data comes in 2 m grid
-    nNeighborsMax_alt = int((np.pi*(radiusOfInfluence+1.0)**2)/4.0)
-
-    print("        Averaging up to " + str(nNeighborsMax_alt) + " values from the original GLISTIN data for each new grid cell")
+    print("        Averaging up to " + str(nNeighborsMax) + " values from the original GLISTIN data for each new grid cell")
     print("          (the # of points within a circle with r=" + str(round(radiusOfInfluence,0)) + "m ")
     print("           assuming 2m separation of original GLISTIN data, and using r equal to the distance")
     print("           between the center of each new grid cell and its corners: r=sqrt(2)*new grid resolution/2")
 
     output =  kd_tree.resample_custom(area_original, grid, area_new, radius_of_influence=radiusOfInfluence,
-                                      fill_value=np.nan, neighbours=nNeighborsMax_alt, weight_funcs=wf, with_uncert=True)
+                                      fill_value=np.nan, neighbours=nNeighborsMax, weight_funcs=wf, with_uncert=True, reduce_data=False)
+
     if printStatus:
         print("        Resampling calculation time: %s seconds" % round((time.time() - start_time),2))
 
 
-    result = output[0]
+    # comes back as a double    
+    result = output[0] 
     stddev = output[1]
     count = output[2]
 

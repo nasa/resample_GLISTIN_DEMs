@@ -88,7 +88,7 @@ def generate_new_dataset(variables,variableNames,coordinates,coordinateNames,pro
                 data_vars['geoid'] = (['y', 'x'], geoid)
 
     if addGeoid:
-        quality_flag = np.zeros_like(elevation)
+        quality_flag = np.zeros_like(elevation, dtype=np.int8)
         indices1=np.logical_and(elevation-geoid>-5,standard_deviation>20)
         quality_flag[indices1] = 1
         indices2 = np.logical_and(elevation - geoid < -5, standard_deviation < 20)
@@ -97,10 +97,11 @@ def generate_new_dataset(variables,variableNames,coordinates,coordinateNames,pro
         quality_flag[indices3] = 3
         quality_flag[count==0] = 4
     else:
-        quality_flag = np.zeros_like(elevation)
+        quality_flag = np.zeros_like(elevation, dtype=np.int8)
         quality_flag[standard_deviation>20]=1
         quality_flag[count==0]=2
-    quality_flag = quality_flag.astype(np.int)
+
+#    quality_flag = quality_flag.astype(np.int8)
     data_vars['elevation_qualityFlag'] = (['y', 'x'], quality_flag)
 
     data_vars['projection'] = chr(0)
@@ -264,7 +265,7 @@ def main_attribute_dictionary(dataFolder,regridded_filepath,resolution,elevation
                            'geospatial_vertical_max': maxElev,
                            'geospatial_vertical_units': 'meters',
                            'geospatial_vertical_positive': 'up',
-                           'geospatial_vertical_resolution': '0.2',
+                           'geospatial_vertical_resolution': 0.20,
                            'time_coverage_start': minTime,
                            'time_coverage_end': maxTime,
                            'time_coverage_duration': timeDuration,
@@ -368,17 +369,18 @@ def write_variables_attributes(dataset,variables,variableNames,coordinates,coord
     dataset['elevation_qualityFlag'].attrs['units'] = 'meters'
     dataset['elevation_qualityFlag'].attrs['coverage_content_type'] = 'qualityInformation'
     if addGeoid:
-        dataset['elevation_qualityFlag'].attrs['flag_values'] = [0,1,2,3,4]
+        dataset['elevation_qualityFlag'].attrs['flag_values'] = np.array([0,1,2,3,4],dtype=np.int8)
         dataset['elevation_qualityFlag'].attrs['flag_meanings'] = 'elevation_standardDeviation<20;elevation-geoid>-5 ' \
                                                                   'elevation_standardDeviation>20;elevation-geoid>-5 ' \
                                                                   'elevation_standardDeviation<20;elevation-geoid<-5 ' \
                                                                   'elevation_standardDeviation>20;elevation-geoid<-5 ' \
                                                                   'elevation_count=0'
-        dataset['elevation_qualityFlag'].attrs['_FillValue'] = 4
+        dataset['elevation_qualityFlag'].attrs['_FillValue'] = np.array([4],dtype=np.int8)[0]
     else:
-        dataset['elevation_qualityFlag'].attrs['flag_values'] = [0,1,2]
+        dataset['elevation_qualityFlag'].attrs['flag_values'] = np.array([0,1,2],dtype=np.int8)
         dataset['elevation_qualityFlag'].attrs['flag_meanings'] = 'elevation_standardDeviation<20 elevation_standardDeviation<20 elevation_count=0'
-        dataset['elevation_qualityFlag'].attrs['_FillValue'] = 2
+        dataset['elevation_qualityFlag'].attrs['_FillValue'] = np.array([2],dtype=np.int8)[0]
+
     dataset['elevation_qualityFlag'].attrs['coordinates'] = 'latitude longitude'
     dataset['elevation_qualityFlag'].attrs['grid_mapping'] = 'projection'
     dataset['elevation_qualityFlag'].attrs['datum'] = '+ellps=urn:ogc:def:crs:EPSG::' + EPSG
