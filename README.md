@@ -1,6 +1,8 @@
 # resample_GLISTIN_DEMs
 This set of codes is a Python toolbox to download and resample GLISTIN-A radar interferometer digital elevation models from NASA's Oceans Melting Greenland campaign. 
 
+This code was authored by **Matthew Gonzalgo**, **Forrest Graham**, and ** Mike Wood**. Matthew and Forrest were JPL summer interns and Mike Wood was a JPL postdoc. 
+
 The official OMG GLISTIN-A data product is hosted on NASA's <a href="https://podaac.jpl.nasa.gov/">PO.DAAC</a>: 
 <a href="https://podaac.jpl.nasa.gov/dataset/OMG_L3_ICE_ELEV_GLISTINA">OMG_L3_ICE_ELEV_GLISTINA</a>
 
@@ -14,7 +16,6 @@ The official OMG GLISTIN-A data product is hosted on NASA's <a href="https://pod
 
 <br><br>
 
-This code was authored by Matthew Gonzalgo, Forrest Graham, and Mike Wood. Matthew and Forrest were JPL summer interns and Mike Wood was a JPL postdoc. 
 
 ## Getting Started
 Required Python packages: ```numpy```,```scipy```, ```argparse```, ```requests```, ```pyresample```, ```utm```, ```netCDF4```, ```xarray```, ```osr```
